@@ -1,0 +1,14 @@
+{
+  "Records": [
+    {
+      "s3": {
+        "bucket": {
+          "name": "march-28-2018-inputbucket"
+        },
+        "object": {
+          "key": "DrugAdverseEvents_September.txt"
+        }
+      }
+    }
+  ]
+}
