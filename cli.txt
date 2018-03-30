@@ -1,0 +1,147 @@
+Developing on AWS
+
+3/27/2018 (3 Days)
+
+--- Day 1
+
+aws s3api list-objects --delimiter / --prefix user-counts --bucket azza-emr3
+
+aws s3api list-objects --prefix user-counts --bucket azza-emr3
+
+aws s3api list-objects --prefix user-counts/ --bucket azza-emr3
+
+
+head-object -> meta data
+tag-object  -> tag, use to assign permission
+
+
+# DynamoDB
+Key     Value
+
+Primary key <-> Partition key === hashkey
+
+             / Partition key === hashkey
+Primary key -
+             \ Sort key === rangeKey
+
+
+Global Secondary Index up to 5
+
+Local Secondary Index
+
+Batch Operations
+
+DynamoDB Local
+
+DynamoDB Accelerator (DAX) DynamoDB Cache
+
+
+----- Day 2
+
+# Lambda
+Models
+Push: Echo S3, SNS, Cognito -> Push events to AWS Lambda
+Pull: DynamoDB and Kinesis
+
+
+Test locally: AWS SAM Local
+
+Get uploaded source code from lambda
+`aws lambda get-function --function-name LambdaTransformer`
+
+# Step Function
+
+# SQS
+
+# SNS
+
+# Kinesis
+
+Data Record
+Sequence Number
+
+Paritition Key
+Data Blob
+
+aws kinesis create-stream --stream-name <name> --shard-count 2
+
+aws kinesis describe-stream --stream-name <name>
+
+aws kinesis describe-stream --stream-name <name> --query "StreamDescription.Shards[<Number>].ShardId" --output text
+
+aws kinesis describe-stream --stream-name kinesis-lab-stream-123123 --query "StreamDescription.Shards[1].ShardId"
+
+aws kinesis get-shard-iterator --stream-name kinesis-lab-stream-123123 --shard-id shardId-000000000006 --shard-iterator-type "LATEST" --query "ShardIterator"
+
+aws kinesis get-records --shard-iterator "AAAAAAAAAAHDLM6Ho0bwK8iOi/fp6HRkceHXQDaTjOUCsQPGc/WaJ93hjJlGVJp1PJh8hcauBW+pa8riDtBl4wZXAyP+h2CDCJbEWmjix1powRwytWPGGRIvmEn/kxxzSfxFoNsZLgP+5/CZ/Yo4LSNQUSHtUiMLWaDGe2ROuaOI0eNtUhWjfhze9Q9sFTtpBgQh+oEKMHOs39G3eHrO1OGcnOPKwqqCR93mda6etdYyHn2h2UFE2w=="
+
+--- Day 3
+
+IAM
+
+Tag, tag, tag
+
+User based
+
+Resource based
+
+Role:
+Trust Policy
+Access Policy
+
+Identity Provider
+Security Token Service (STS)
+
+Amazon Cognito
+
+
+# Elastic Cache
+
+# Amazon RDS
+
+# Elastic Beanstalk
+
+# Cloudformation
+
+
+
+
+
+
+# Some AWS CLI Commands I used on my own
+
+aws ec2 describe-key-pairs
+
+aws ec2 run-instances --image-id ami-xxxxxxxx --count 1 --instance-type t1.micro --key-name MyKeyPair --security-groups my-sg
+
+aws ec2 run-instances --image-id ami-79873901 --count 1 --instance-type m5.2xlarge   --key-name p2.8xlarge --block-device-mappings "[{\"DeviceName\":\"/dev/sdf\",\"Ebs\":{\"VolumeSize\":100,\"DeleteOnTermination\":true}}]"
+
+
+aws ec2 authorize-security-group-ingress --group-id security_group_id --protocol tcp --port 22
+
+aws ec2 authorize-security-group-ingress --group-id sg-a97034cf --protocol tcp --port 22 --cidr 0.0.0.0/0
+
+ aws ec2 authorize-security-group-ingress --group-id sg-a97034cf --protocol tcp --port 22 --cidr 0.0.0.0/0
+
+
+# IPs
+aws ec2 describe-instances --query "Reservations[].Instances[][PublicIpAddress]"
+
+aws ec2 describe-images | grep ubuntu
+
+aws ec2 describe-instances --region us-west-2 --output table
+
+aws ec2 describe-instances --region us-west-2 --query 'Reservations[0].Instances[0].InstanceId'
+
+
+aws ec2 terminate-instances --instance-ids
+
+aws ec2 terminate-instances --instance-ids i-0027038b1f223e5ea --region us-west-2
+
+
+# Attach EBS
+sudo fdisk -l
+sudo mkdir mount_point
+sudo mkdir /mnt
+sudo mount device_name mount_point
+sudo mount /dev/nvme1n1 /mnt
